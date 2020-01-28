@@ -22,19 +22,22 @@ export class UsersService {
   }
 
   async createOne(user : any){
-    let userbody : UserBody ={
-      userId : this.uuidv4(),
-      username:user.username,
-      password : user.password
-    };
 
-    if (this.UserExists(userbody.username)) {
+    if (this.UserExists(user.username)) {
       return "User exists.."
     }
+    else{
+      let userbody : UserBody ={
+        userId : this.uuidv4(),
+        username:user.username,
+        password : user.password
+      };
+  
+      this.users.push(userbody);
+      const {password , ...result} = userbody;
+      return userbody;
+    }
 
-    this.users.push(userbody);
-    const {password , ...result} = userbody
-    return result;
   }
 
   async getUsers() : Promise<UserBody[]> {

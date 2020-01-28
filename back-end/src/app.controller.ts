@@ -3,6 +3,7 @@ import { Controller, Request, UseGuards, Post, Get, Delete , Put, Body } from '@
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { UsersService } from './users/users.service';
+import { UserBody } from './users/user';
 
 @Controller()
 export class AppController {
@@ -21,8 +22,9 @@ export class AppController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
+
   @Post('auth/register')
-  async create(@Body() user) {
+  async create(@Body() user :UserBody) {
      return this.authService.create(user);
   }
 
