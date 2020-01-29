@@ -7,7 +7,8 @@ export class MyAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info: Error) {
     if(info)
      throw new HttpException(info.message, 401)
-    return user;
+    
+     return user;
   }
 
 }

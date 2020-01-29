@@ -1,38 +1,43 @@
 
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserBody } from 'src/users/user';
+import { User } from 'src/users/models/user.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateUserDto } from 'src/users/models/create-user.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService,
-    private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectModel('User') private readonly userModel: Model<User>
+    ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
-  async login(user: UserBody) : Promise<any> {
-    const payload = { username: user.username, sub: user.userId, roles: user.roles};
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
-  async create(user:UserBody) : Promise<any> {
-    if (!user){
-      return "400 : Enter a correct user .."
-    }
-    else{
-        return this.usersService.createOne(user)        
+    async validateUserMongo(usern: string, pass: string): Promise<any> {
+      const user = await this.userModel.findOne({ username: usern });
+      if (user && user.password === pass) {
+        const { password, ...result } = user;
+        return result;
       }
+      return null;
     }
+  
+    // post a single user
+    async create(createUserDTO: CreateUserDto): Promise<User> {
+      const newUser = await this.userModel(createUserDTO);
+      return newUser.save();
+  }
+  
+    async login(user: CreateUserDto) : Promise<any> {
+      const payload = { username: user.username, sub: user._id, roles: user.roles};
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    }
+
+    async getHelloAdmin() {
+      return "You are in the admin panel"
+  }
 }
 
   

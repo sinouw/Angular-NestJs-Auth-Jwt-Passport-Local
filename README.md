@@ -1,4 +1,4 @@
-# Angular-NestJs-Auth-Jwt-Passport
+# Angular-NestJs-MongoDb-Auth-Jwt-Passport
 Passport-JWT Authentification using Angular 8 and NestJs Web Api
 
 **Back-end**
