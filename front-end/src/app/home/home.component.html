@@ -1,0 +1,22 @@
+<app-header></app-header>
+<div class="jumbotron ">
+    <div class="container">
+        <h1 class="display-1">Profile</h1>
+        <p class="lead">Hello, Mr {{userDetails?.username}}.</p>
+    </div>
+</div>
+<hr>
+
+<div class="container">
+    <div class="card m-5" style="width:18rem" *ngIf="userDetails">
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Username : </strong>"{{userDetails?.username}}"</li>
+            <li class="list-group-item"><strong>Role : </strong>
+                <a *ngFor="let role of userDetails.roles">
+                    "{{role}}"
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
